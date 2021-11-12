@@ -1,6 +1,5 @@
 const express = require('express');
 const List = require('./models/lists.js');
-//const bodyParser = require('body-parser');
 
 const app = express();
 
