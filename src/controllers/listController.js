@@ -36,11 +36,27 @@ router.post('/lista', async (req,res) => {
   }
 });
 
+router.delete('/lista', async (req, res) => {
+  const id = req.query.id.toString();
+
+  try {
+    if ( id === undefined ) {
+      throw { error: "SEM ID" };
+    }
+
+    const lista = await listService.deleteById(id);
+    
+    res.send(lista);
+  }catch (e) {    
+    res.status(500).send(e);
+  }
+});
+
 router.get('/listas', async (req, res) => {
   const id = req.query.id.toString();
 
   try {
-    if ( id == undefined ) {
+    if ( id === undefined ) {
       throw { error: "SEM ID" };
     }
 
@@ -50,7 +66,7 @@ router.get('/listas', async (req, res) => {
       throw { error: "USUARIO NAO ENCONTRADO" };
     }
 
-    const listas = await listService.findByUserId(id);
+    const listas = await listService.findAllByUserId(id);
     res.send(listas);
   }catch (e) {
     res.status(500).send(e);

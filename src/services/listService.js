@@ -4,11 +4,21 @@ const createList = (lista) => {
   return List.create(lista);
 }
 
-const findByUserId = (id) => {
+const findAllByUserId = (id) => {
   return List.find({ user_id: id });
+}
+
+const findById = (id) => {
+  return List.find({ _id: id });
+}
+
+const deleteById = (id) => {
+  return List.deleteOne({_id: id});
 }
 
 module.exports = {
   createList,
-  findByUserId,
+  findAllByUserId,
+  findById,
+  deleteById,
 }
