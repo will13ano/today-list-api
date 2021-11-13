@@ -1,11 +1,16 @@
 const express = require('express');
 const listService = require('../services/listService');
 const userService = require('../services/userService');
+const authMiddleware = require('../middlewares/auth');
 const router  = express.Router();
+
+router.use(authMiddleware);
 
 router.post('/lista/:id/todo', async (req,res)  => {
   const { id }  =  req.params;
-  const { user_id, todo } = req.body;
+  const { todo } = req.body;
+  const user_id = req.userId;
+
   try {
     const user = await userService.findById(user_id);
 
@@ -31,7 +36,7 @@ router.post('/lista/:id/todo', async (req,res)  => {
 
 router.delete('/lista/:id_lista/todo/:id', async (req, res) => {
   const { id_lista, id } = req.params;
-  const { user_id } = req.body;
+  const user_id = req.userId;
 
   try {
     const lista = await listService.findById(id_lista);

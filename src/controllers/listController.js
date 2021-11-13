@@ -1,8 +1,10 @@
 const express = require('express');
 const listService = require('../services/listService');
 const userService =  require('../services/userService');
+const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
 
+router.use(authMiddleware);
 // {
 //   "nome": { nome da lista },
 //   "user_id": { id do usuario },
@@ -15,7 +17,7 @@ const router = express.Router();
 // }
 router.post('/lista', async (req,res) => {
   const lista = req.body;
-  const { user_id } = req.body;
+  const user_id = req.userId;
 
   try {
     if (!lista.nome) {
@@ -28,7 +30,7 @@ router.post('/lista', async (req,res) => {
       throw { error: "USUARIO NAO ENCONTRADO" };
     }
     // TODO : GERAR COR IGUAL NO FRONT
-    const newLista = await listService.createList(lista);
+    const newLista = await listService.createList({...lista, user_id});
 
     res.send(newLista);
   }catch (e) {
@@ -36,24 +38,30 @@ router.post('/lista', async (req,res) => {
   }
 });
 
-router.delete('/lista', async (req, res) => {
-  const id = req.query.id.toString();
+router.delete('/lista/:id', async (req, res) => {
+  const { id } = req.params;
 
   try {
     if ( id === undefined ) {
       throw { error: "SEM ID" };
     }
 
-    const lista = await listService.deleteById(id);
-    
-    res.send(lista);
+    const lista = await listService.findById(id);
+
+    if (req.userId != lista.user_id) {
+      throw { error: "USUARIO NÃO É O DONO DA LISTA"};
+    }
+
+    const deletedLista = await listService.deleteById(id);
+
+    res.status(200).send(deletedLista);
   }catch (e) {    
     res.status(500).send(e);
   }
 });
 
 router.get('/listas', async (req, res) => {
-  const id = req.query.id.toString();
+  const id = req.userId;
 
   try {
     if ( id === undefined ) {
