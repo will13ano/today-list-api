@@ -9,7 +9,7 @@ const findAllByUserId = (id) => {
 }
 
 const findById = (id) => {
-  return List.find({ _id: id });
+  return List.findOne({ _id: id });
 }
 
 const deleteById = (id) => {

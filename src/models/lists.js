@@ -13,10 +13,18 @@ const ListSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  todos: [{
-    descricao: String,
-    feito: Boolean,
-  }], 
+  todos: [
+    new mongoose.Schema({
+      descricao: {
+        type: String,
+        required: true
+      },
+      feito: {
+        type: Boolean,
+        default: false
+      }
+    }),
+  ], 
 });
 
 const List = mongoose.model('List', ListSchema);
