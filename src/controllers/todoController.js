@@ -29,4 +29,24 @@ router.post('/lista/:id/todo', async (req,res)  => {
   }
 });
 
+router.delete('/lista/:id_lista/todo/:id', async (req, res) => {
+  const { id_lista, id } = req.params;
+  const { user_id } = req.body;
+
+  try {
+    const lista = await listService.findById(id_lista);
+
+    if (lista.user_id != user_id) {
+      throw {error: "ESSA LISTA NAO PERTENCE AO USUARIO"};
+    }
+
+    lista.todos.id(id).remove();
+    lista.save();
+  
+    res.send(lista);
+  }catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 module.exports = app => app.use('', router);
