@@ -1,8 +1,14 @@
 const mongoose = require('../database');
 
 const ListSchema = new mongoose.Schema({
-  nome : String,
-  color: String,
+  nome : {
+    type: String,
+    required: true,
+  },
+  color: {
+    type: String,
+    required: true,
+  },
   todos: [{
     descricao: String,
     feito: Boolean,
