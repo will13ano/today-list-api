@@ -3,12 +3,29 @@ const listService = require('../services/listService');
 const userService =  require('../services/userService');
 const router = express.Router();
 
+// {
+//   "nome": { nome da lista },
+//   "user_id": { id do usuario },
+//   "todos": [
+//      {
+//        "description": {decricao},
+//        "feito": {default false}
+//      }
+//   ]
+// }
 router.post('/lista', async (req,res) => {
   const lista = req.body;
+  const { user_id } = req.body;
 
   try {
     if (!lista.nome) {
       throw { error: "NOME VAZIO" };
+    }
+
+    const user = await userService.findById(user_id);
+
+    if (!user) {
+      throw { error: "USUARIO NAO ENCONTRADO" };
     }
     // TODO : GERAR COR IGUAL NO FRONT
     const newLista = await listService.createList(lista);
@@ -33,9 +50,8 @@ router.get('/listas', async (req, res) => {
       throw { error: "USUARIO NAO ENCONTRADO" };
     }
 
-
-
-    res.send(user);
+    const listas = await listService.findByUserId(id);
+    res.send(listas);
   }catch (e) {
     res.status(500).send(e);
   }
