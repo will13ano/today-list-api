@@ -81,4 +81,23 @@ router.get('/listas', async (req, res) => {
   }
 });
 
+router.put('/lista/:id', async (req, res) => {
+  const user_id = req.userId;
+  const { id } = req.params;
+
+  try {
+    const user = await userService.findById(user_id);
+
+    if (!user) {
+      throw { error: "USUARIO NAO ENCONTRADO"};
+    }
+
+    const lista = await listService.updateLista(id, req.body);
+    
+    res.send(lista);
+  } catch (erro) {
+    res.status(500).send(erro);
+  }
+});
+
 module.exports = app => app.use('' ,router);

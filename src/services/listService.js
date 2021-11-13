@@ -16,9 +16,14 @@ const deleteById = (id) => {
   return List.deleteOne({_id: id});
 }
 
+const updateLista = (id, params) => {
+  return List.updateOne({_id: id}, {...params});
+}
+
 module.exports = {
   createList,
   findAllByUserId,
   findById,
   deleteById,
+  updateLista
 }
