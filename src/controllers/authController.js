@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
 
     try{
         if( await userService.findByEmail(email) ) {
-            return res.status(418).send({ error: 'Usuário já existe' });
+            return res.status(500).send({ error: 'Usuário já existe' });
         }
 
         const user = await userService.createUser(req.body);
@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
             token: generateToken({ id: user.id }),
         });
     } catch(err){
-        return res.status(418).send({ error: 'Falha no registro' });
+        return res.status(500).send({ error: 'Falha no registro' });
     }
 });
 
@@ -40,11 +40,11 @@ router.post('/authenticate', async (req, res) => {
     const user = await userService.findByEmailWithPassword(email);
 
     if(!user){
-        return res.status(418).send({ error: 'Usuário não encontrado' });
+        return res.status(500).send({ error: 'Usuário não encontrado' });
     }
 
     if(!await bcrypt.compare(password, user.password)){
-        return res.status(418).send({ error: 'Senha inválida' });
+        return res.status(500).send({ error: 'Senha inválida' });
     }
 
     user.password = undefined;
