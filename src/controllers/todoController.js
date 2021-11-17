@@ -54,4 +54,34 @@ router.delete('/lista/:id_lista/todo/:id', async (req, res) => {
   }
 });
 
+router.put('/lista/:id_lista/todo/:id', async (req, res) =>{
+  const { id_lista, id } = req.params;
+  const user_id = req.userId;
+  const body = req.body;
+
+  try {
+    const lista = await listService.findById(id_lista);
+
+    if (lista.user_id != user_id) {
+      throw { error: "ESSA LISTA NAO PERTENCE AO USUARIO"};
+    }
+
+    const todo = lista.todos.id(id);
+
+    if(body.descricao) {
+      todo.descricao = body.descricao;
+    }
+    if(body.feito) {
+      todo.feito = body.feito;
+    }
+
+    lista.save();        
+
+    res.send(lista);
+  } 
+  catch (erro) {
+    res.status(500).send(erro);
+  }
+});
+
 module.exports = app => app.use('', router);
