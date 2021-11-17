@@ -29,8 +29,10 @@ router.post('/lista', async (req,res) => {
     if (!user) {
       throw { error: "USUARIO NAO ENCONTRADO" };
     }
+
     // TODO : GERAR COR IGUAL NO FRONT
-    const newLista = await listService.createList({...lista, user_id});
+    const color = await listService.getColor();
+    const newLista = await listService.createList({...lista, color: color.cod, user_id});
 
     res.send(newLista);
   }catch (e) {
