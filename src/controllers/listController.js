@@ -5,16 +5,7 @@ const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
 
 router.use(authMiddleware);
-// {
-//   "nome": { nome da lista },
-//   "user_id": { id do usuario },
-//   "todos": [
-//      {
-//        "description": {decricao},
-//        "feito": {default false}
-//      }
-//   ]
-// }
+
 router.post('/lista', async (req,res) => {
   const lista = req.body;
   const user_id = req.userId;
@@ -32,6 +23,7 @@ router.post('/lista', async (req,res) => {
 
     // TODO : GERAR COR IGUAL NO FRONT
     const color = await listService.getColor();
+    
     const newLista = await listService.createList({...lista, color: color.cod, user_id});
 
     res.send(newLista);
