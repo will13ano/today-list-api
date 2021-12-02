@@ -21,6 +21,10 @@ const updateLista = (id, params) => {
   return List.updateOne({_id: id}, {...params});
 }
 
+const findPublicLists = () => {
+  return List.find({public: 'true'}).exec();
+}
+
 const getColor = async () => {
   const colors = await Colors.find({});
   const color = colors.shift();
@@ -34,6 +38,7 @@ const getColor = async () => {
 module.exports = {
   createList,
   findAllByUserId,
+  findPublicLists,
   findById,
   deleteById,
   updateLista,

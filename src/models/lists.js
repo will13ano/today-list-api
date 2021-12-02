@@ -13,6 +13,10 @@ const ListSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  public: {
+    type: Boolean,
+    default: false
+  },
   todos: [
     new mongoose.Schema({
       descricao: {

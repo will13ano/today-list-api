@@ -54,6 +54,17 @@ router.delete('/lista/:id', async (req, res) => {
   }
 });
 
+router.get('/lista/public', async (req, res) => {
+  try {
+    const listas = await listService.findPublicLists();
+
+    res.status(200).send(listas);
+
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
 router.get('/listas', async (req, res) => {
   const id = req.userId;
 
